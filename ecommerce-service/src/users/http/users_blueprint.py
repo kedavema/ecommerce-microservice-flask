@@ -1,7 +1,7 @@
 
 from flask import Blueprint, request
 
-from src.utils.utils import authentication_required
+from src.utils.utils import authentication_required, is_superuser
 
 from enviame.inputvalidation import validate_schema_flask, SUCCESS_CODE, FAIL_CODE
 
@@ -85,9 +85,10 @@ def create_users_blueprint(manage_users_usecase):
       
     
     @users.route("/create-seller", methods = ["POST"])
-    @validate_schema_flask(user_validatable_fields.SELLER_CREATION_VALIDATABLE_FIELDS)
+    @validate_schema_flask(user_validatable_fields.SELLER_USER_CREATION_VALIDATABLE_FIELDS)
     @authentication_required
-    def create_seller():
+    @is_superuser
+    def create_seller_user():
 
         body = request.get_json()
         
@@ -98,7 +99,7 @@ def create_users_blueprint(manage_users_usecase):
         body["password"] = password_hash
 
         try:
-            user = manage_users_usecase.create_seller(body)
+            user = manage_users_usecase.create_seller_user(body)
             data = user.serialize()
             code = SUCCESS_CODE
             message = "User Seller created succesfully"
@@ -122,9 +123,10 @@ def create_users_blueprint(manage_users_usecase):
       
     
     @users.route("/create-user", methods = ["POST"])
-    @validate_schema_flask(user_validatable_fields.USER_CREATION_VALIDATABLE_FIELDS)
+    @validate_schema_flask(user_validatable_fields.MARKETPLACE_USER_CREATION_VALIDATABLE_FIELDS)
     @authentication_required
-    def create_user():
+    @is_superuser
+    def create_marketplace_user():
       
         body = request.get_json()
         
@@ -133,7 +135,7 @@ def create_users_blueprint(manage_users_usecase):
         body["password"] = password_hash
 
         try:
-            user = manage_users_usecase.create_user(body)
+            user = manage_users_usecase.create_marketplace_user(body)
             data = user.serialize()
             code = SUCCESS_CODE
             message = "User created succesfully"
@@ -157,6 +159,8 @@ def create_users_blueprint(manage_users_usecase):
       
       
     @users.route("/users/<string:user_id>", methods = ["DELETE"])
+    @authentication_required
+    @is_superuser
     def delete_user(user_id):
 
         try:

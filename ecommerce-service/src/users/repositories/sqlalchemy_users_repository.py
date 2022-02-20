@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, Integer, String, Boolean
+from sqlalchemy import Table, Column, Integer, String, Boolean, ForeignKey
 
 from src.users.entities.user import User
     
@@ -63,7 +63,7 @@ class SQLAlchemyUsersRepository():
             return superuser
           
           
-    def create_seller(self, seller):
+    def create_seller_user(self, seller):
 
         with self.session_factory() as session:
 
@@ -73,7 +73,7 @@ class SQLAlchemyUsersRepository():
             return seller
           
           
-    def create_user(self, user):
+    def create_marketplace_user(self, user):
 
         with self.session_factory() as session:
 
@@ -92,10 +92,9 @@ class SQLAlchemyUsersRepository():
             session.commit()
           
 
-    def get_user_logged(self, data):
+    def get_user_by_email(self, email):
       
         with self.session_factory() as session:
           
-            user = session.query(User).filter_by(email=data["email"]).first()
-            
+            user = session.query(User).filter_by(email=email).first()
             return user

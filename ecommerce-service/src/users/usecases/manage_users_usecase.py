@@ -44,24 +44,24 @@ class ManageUsersUsecase:
         return user
       
       
-    def create_seller(self, data):
+    def create_seller_user(self, data):
 
         # Crea una instancia User desde la data recibida, que ya debe venir validada desde afuera,
         # y guarda dicha instancia en el repositorio para finalmente retornarla.
             
         user = User.from_dict(data)
-        user = self.users_repository.create_seller(user)
+        user = self.users_repository.create_seller_user(user)
 
         return user
       
       
-    def create_user(self, data):
+    def create_marketplace_user(self, data):
 
         # Crea una instancia User desde la data recibida, que ya debe venir validada desde afuera,
         # y guarda dicha instancia en el repositorio para finalmente retornarla.
             
         user = User.from_dict(data)
-        user = self.users_repository.create_user(user)
+        user = self.users_repository.create_marketplace_user(user)
 
         return user
       
@@ -74,7 +74,6 @@ class ManageUsersUsecase:
         user = self.get_user(user_id)
 
         if user:
-
             user = self.users_repository.delete_user(user_id)
 
         else:
@@ -92,13 +91,17 @@ class ManageUsersUsecase:
         hour = datetime.timedelta(minutes=60)
         SECRET_KEY = "LKAjsuhifiopaosuNAKSJXNC98lak)09a23"
         
-        user = self.users_repository.get_user_logged(data)
+        user = self.users_repository.get_user_by_email(data["email"])
         
-        if check_password_hash(user.password, data["password"]):
+        if user is None:
+          
+            return jsonify({"message": "You must create a user first"})
+        
+        elif check_password_hash(user.password, data["password"]):
           
             token = jwt.encode({"id": user.id, "exp": utcnow + hour}, SECRET_KEY)
 
-            return jsonify({"token": token.decode('UTF-8'), "user": user})
+            return jsonify({"token": token.decode('UTF-8')})
           
           
           

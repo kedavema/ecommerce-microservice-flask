@@ -1,69 +1,44 @@
 # Constantes que definen el "esquema" del payload que hay que validar
-# para el caso de crear o actualizar un libro. Estos esquemas son usados
+# para el caso de crear o actualizar un producto. Estos esquemas son usados
 # en el decorador "validate_schema_flask" usado en los blueprints.
 
 # La diferencia entre el esquema de creación y el de actualización es que
 # en este último los campos son opcionales, y en algunos casos algunos campos
 # podrían sólo definirse en la creación pero no permitir su actualización.
 
-SUPERUSER_CREATION_VALIDATABLE_FIELDS = {
+SELLER_CREATION_VALIDATABLE_FIELDS = {
 
     "name": {
         "required": True,
         "type": "string",
     },
 
-    "password": {
+    "short_desc": {
         "required": True,
         "type": "string",
     },
 
-    "email": {
+    "warehouse": {
         "required": True,
         "type": "string",
     },
 
 }
 
-
-SELLER_USER_CREATION_VALIDATABLE_FIELDS = {
-
-    "name": {
-        "required": True,
-        "type": "string",
-    },
-
-    "password": {
-        "required": True,
-        "type": "string",
-    },
-
-    "email": {
-        "required": True,
-        "type": "string",
-    },
-
-}
-
-
-MARKETPLACE_USER_CREATION_VALIDATABLE_FIELDS = {
+SELLER_UPDATE_VALIDATABLE_FIELDS = {
 
     "name": {
-        "required": True,
+        "required": False,
         "type": "string",
     },
 
-    "password": {
-        "required": True,
+    "short_desc": {
+        "required": False,
         "type": "string",
     },
 
-    "email": {
-        "required": True,
-        "type": "string",
-    },
-    "shipping_address": {
-        "required": True,
+    "warehouse": {
+        "required": False,
         "type": "string",
     },
 

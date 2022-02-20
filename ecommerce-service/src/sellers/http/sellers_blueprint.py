@@ -1,15 +1,15 @@
 
 from flask import Blueprint, request
 
-from src.utils.utils import is_seller
+from src.utils.utils import is_superuser
 
 from src.utils.utils import authentication_required
 
 from enviame.inputvalidation import validate_schema_flask, SUCCESS_CODE, FAIL_CODE
 
-from src.products.http.validation import product_validatable_fields
+from src.sellers.http.validation import sellers_validatable_fields
 
-# Endpoints para CRUD de libros.
+# Endpoints para CRUD de EMPRESAS.
 
 # Sólo se encarga de recibir las llamadas HTTP y le entrega los datos
 # relevantes a los casos de uso correspondientes. Esta capa no debe
@@ -21,24 +21,24 @@ from src.products.http.validation import product_validatable_fields
 # en el archivo "book_validatable_fields". No sólo valida que todos los campos
 # requeridos vengan en el payload, sino que también que no vengan campos de más.
 
-def create_products_blueprint(manage_products_usecase):
+def create_sellers_blueprint(manage_sellers_usecase):
 
-    products = Blueprint("products", __name__)
+    sellers = Blueprint("sellers", __name__)
 
-    @products.route("/products", methods = ["GET"])
+    @sellers.route("/sellers", methods = ["GET"])
     @authentication_required
-    @is_seller
-    def get_products():
+    @is_superuser
+    def all_sellers():
 
-        products = manage_products_usecase.get_products()
+        sellers = manage_sellers_usecase.get_sellers()
 
-        products_dict = []
-        for product in products:
-            products_dict.append(product.serialize())
+        sellers_dict = []
+        for seller in sellers:
+            sellers_dict.append(seller.serialize())
 
-        data = products_dict
+        data = sellers_dict
         code = SUCCESS_CODE
-        message = "Products obtained succesfully"
+        message = "Sellers obtained succesfully"
         http_code = 200
 
         response = {
@@ -49,23 +49,23 @@ def create_products_blueprint(manage_products_usecase):
         
         return response, http_code
 
-    @products.route("/products/<string:product_id>", methods = ["GET"])
+    @sellers.route("/sellers/<string:seller_id>", methods = ["GET"])
     @authentication_required
-    @is_seller
-    def get_product(product_id):
+    @is_superuser
+    def get_seller(seller_id):
 
-        product = manage_products_usecase.get_product(product_id)
+        seller = manage_sellers_usecase.get_seller(seller_id)
 
-        if product:
-            data = product.serialize()
+        if seller:
+            data = seller.serialize()
             code = SUCCESS_CODE
-            message = "Products obtained succesfully"
+            message = "sellers obtained succesfully"
             http_code = 200
 
         else:
             data = None
             code = FAIL_CODE
-            message = f"Products of ID {product_id} does not exist."
+            message = f"Sellers of ID {seller_id} does not exist."
             http_code = 404
 
         response = {
@@ -78,19 +78,19 @@ def create_products_blueprint(manage_products_usecase):
         
         return response, http_code
 
-    @products.route("/products", methods = ["POST"])
-    @validate_schema_flask(product_validatable_fields.PRODUCT_CREATION_VALIDATABLE_FIELDS)
+    @sellers.route("/sellers", methods = ["POST"])
+    @validate_schema_flask(sellers_validatable_fields.SELLER_CREATION_VALIDATABLE_FIELDS)
     @authentication_required
-    @is_seller
-    def create_product():
+    @is_superuser
+    def create_seller():
 
         body = request.get_json()
 
         try:
-            product = manage_products_usecase.create_product(body)
-            data = product.serialize()
+            seller = manage_sellers_usecase.create_seller(body)
+            data = seller.serialize()
             code = SUCCESS_CODE
-            message = "Product created succesfully"
+            message = "seller created succesfully"
             http_code = 201
 
         except ValueError as e:
@@ -109,18 +109,18 @@ def create_products_blueprint(manage_products_usecase):
 
         return response, http_code
 
-    @products.route("/products/<string:product_id>", methods = ["PUT"])
-    @validate_schema_flask(product_validatable_fields.PRODUCT_UPDATE_VALIDATABLE_FIELDS)
+    @sellers.route("/sellers/<string:seller_id>", methods = ["PUT"])
+    @validate_schema_flask(sellers_validatable_fields.SELLER_UPDATE_VALIDATABLE_FIELDS)
     @authentication_required
-    @is_seller
-    def update_product(product_id):
+    @is_superuser
+    def update_seller(seller_id):
 
         body = request.get_json()
 
         try:
-            product = manage_products_usecase.update_product(product_id, body)
-            data = product.serialize()
-            message = "Product updated succesfully"
+            seller = manage_sellers_usecase.update_seller(seller_id, body)
+            data = seller.serialize()
+            message = "seller updated succesfully"
             code = SUCCESS_CODE
             http_code = 200
 
@@ -140,15 +140,15 @@ def create_products_blueprint(manage_products_usecase):
 
         return response, http_code
 
-    @products.route("/products/<string:product_id>", methods = ["DELETE"])
+    @sellers.route("/sellers/<string:seller_id>", methods = ["DELETE"])
     @authentication_required
-    @is_seller
-    def delete_product(product_id):
+    @is_superuser
+    def delete_seller(seller_id):
 
         try:
-            manage_products_usecase.delete_product(product_id)
+            manage_sellers_usecase.delete_seller(seller_id)
             code = SUCCESS_CODE
-            message = f"Product of ID {product_id} deleted succesfully."
+            message = f"Seller of ID {seller_id} deleted succesfully."
             http_code = 200
 
         except ValueError as e:
@@ -163,4 +163,4 @@ def create_products_blueprint(manage_products_usecase):
 
         return response, http_code
 
-    return products
+    return sellers

@@ -1,7 +1,9 @@
 from datetime import datetime, timezone
 from functools import wraps
+import json
 from flask import request, jsonify
 import jwt
+from src import main
 
 # Funciones de utilidad para el sistema completo.
 
@@ -40,23 +42,70 @@ def get_current_datetime():
   
 
 def authentication_required(f):
+  
+    # Decorador encargado de verificar si el usuario está autenticado.
+  
     @wraps(f)
     def decorator(*args, **kwargs):
 
         token = None
         
-        if "Authorization-token" in request.headers:
-            token = request.headers["Authorization-token"]
+        if "auth-token" in request.headers:
+            token = request.headers["auth-token"]
             
         if not token:
             return jsonify({"message": "an auth token is missing"}), 401
           
         try:
-            data = jwt.decode(token, "asdasdas")
-            print(data)
+            data = jwt.decode(token, "LKAjsuhifiopaosuNAKSJXNC98lak)09a23")
+            kwargs["id"] = data["id"] 
             
         except:
             return jsonify({"message": "invalid auth token"})
+          
+        return f(*args, **kwargs)
+      
+    return decorator
+  
+  
+def is_seller(f):
+  
+    # Decorador encargado de verificar si es un superusuario.
+    
+    @wraps(f)
+    def decorator(*args, **kwargs):
+      
+        user_id = kwargs.pop("id")
+        
+        user = main.manage_users_usecase.get_user(user_id)
+        
+        if not user.is_seller:
+          
+            return jsonify({"message": "User is not authorized"})
+          
+        return f(*args, **kwargs)
+      
+    return decorator
+  
+  
+def is_superuser(f):
+  
+    # Decorador encargado de verificar si es un superusuario.
+    
+    @wraps(f)
+    def decorator(*args, **kwargs):
+      
+        user_id = kwargs.pop("id")
+        
+        user = main.manage_users_usecase.get_user(user_id)
+        
+        if user is None:
+          
+            return jsonify({"message": "You must create a superuser first"})
+        
+        elif not user.is_superuser:
+          
+            return jsonify({"message": "User is not authorized"})
           
         return f(*args, **kwargs)
       
