@@ -13,26 +13,21 @@ from src.frameworks.http.flask import create_flask_app
 # from src.greeting.usecases.greeting_usecase import GreetingUsecase
 
 ########################### PRODUCTS ###########################
-#### Products_repository
 from src.products.repositories.sqlalchemy_products_repository import SQLAlchemyProductsRepository
-#### Products_Manage
 from src.products.usecases.manage_products_usecase import ManageProductsUsecase
-### Products_blueprint
 from src.products.http.products_blueprint import create_products_blueprint
 ########################### USERS ###########################
-#### Users_repository
 from src.users.repositories.sqlalchemy_users_repository import SQLAlchemyUsersRepository
-#### Users_Manage
 from src.users.usecases.manage_users_usecase import ManageUsersUsecase
-### Users_blueprint
 from src.users.http.users_blueprint import create_users_blueprint
 ########################### SELLERS ###########################
-#### Sellers_repository
 from src.sellers.repositories.sqlalchemy_sellers_repository import SQLAlchemySellersRepository
-#### sellers_Manage
 from src.sellers.usecases.manage_sellers_usecase import ManageSellersUsecase
-### sellers_blueprint
 from src.sellers.http.sellers_blueprint import create_sellers_blueprint
+########################### ORDERS ###########################
+from src.orders.repositories.sqlalchemy_orders_repository import SQLAlchemyOrdersRepository
+from src.orders.usecases.manage_orders_usecase import ManageOrdersUsecase
+from src.orders.http.orders_blueprint import create_orders_blueprint
 
 
 # Instanciar dependencias.
@@ -55,6 +50,8 @@ sqlalchemy_products_repository = SQLAlchemyProductsRepository(sqlalchemy_client)
 sqlalchemy_users_repository = SQLAlchemyUsersRepository(sqlalchemy_client)
 ### Sellers repository
 sqlalchemy_sellers_repository = SQLAlchemySellersRepository(sqlalchemy_client)
+### Orders repository
+sqlalchemy_orders_repository = SQLAlchemyOrdersRepository(sqlalchemy_client)
 
 sqlalchemy_client.create_tables()
 
@@ -64,6 +61,7 @@ sqlalchemy_client.create_tables()
 manage_products_usecase = ManageProductsUsecase(sqlalchemy_products_repository)
 manage_users_usecase = ManageUsersUsecase(sqlalchemy_users_repository)
 manage_sellers_usecase = ManageSellersUsecase(sqlalchemy_sellers_repository)
+manage_orders_usecase = ManageOrdersUsecase(sqlalchemy_orders_repository)
 
 blueprints = [
     # create_books_blueprint(manage_books_usecase),
@@ -71,6 +69,7 @@ blueprints = [
     create_products_blueprint(manage_products_usecase),
     create_users_blueprint(manage_users_usecase),
     create_sellers_blueprint(manage_sellers_usecase),
+    create_orders_blueprint(manage_orders_usecase),
 ]
 
 # Crear aplicación HTTP con dependencias inyectadas.

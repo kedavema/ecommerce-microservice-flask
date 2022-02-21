@@ -1,14 +1,15 @@
 
-# Entidad representando a un producto.
+# Entidad representando a una orden de compra.
 
-class Product():
+class Order():
 
-    def __init__(self, id, name, short_desc, qty):
+    def __init__(self, id, status, product_sku, product_qty, product_name):
 
         self.id = id
-        self.name = name
-        self.short_desc = short_desc
-        self.qty = qty
+        self.status = status
+        self.product_sku = product_sku
+        self.product_qty = product_qty
+        self.product_name = product_name
 
     def to_dict(self):
 
@@ -17,9 +18,10 @@ class Product():
 
         return {
             "id": self.id,
-            "name": self.name,
-            "short_desc": self.short_desc,
-            "qty": self.qty,
+            "status": self.status,
+            "product_sku": self.product_sku,
+            "product_qty": self.product_qty,
+            "product_name": self.product_name,
         }
 
     def serialize(self):
@@ -40,8 +42,9 @@ class Product():
         # Si un campo falta en el diccionario, se asume valor None.
 
         id = dict.get("id")
-        name = dict.get("name")
-        short_desc = dict.get("short_desc")
-        qty = dict.get("qty")
+        status = dict.get("status")
+        product_sku = dict.get("product_sku")
+        product_qty = dict.get("product_qty")
+        product_name = dict.get("product_name")
 
-        return Product(id, name, short_desc, qty)
+        return Order(id, status, product_sku, product_qty, product_name)

@@ -1,5 +1,5 @@
 
-# Entidad representando a una empresa.
+# Entidad representando a una Empresa.
 
 class Seller():
 
@@ -27,8 +27,6 @@ class Seller():
         # Retorna un diccionario serializable a JSON.
         # Es parecido a "to_dict", pero es útil para mostrar datos en el exterior,
         # como por ejemplo retornar una respuesta hacia al usuario desde el endpoint.
-        # En este caso no se retorna el "id", ya que es información
-        # privada.
 
         data = self.to_dict()
         
@@ -47,3 +45,4 @@ class Seller():
         warehouse = dict.get("warehouse")
 
         return Seller(id, name, short_desc, warehouse)
+      

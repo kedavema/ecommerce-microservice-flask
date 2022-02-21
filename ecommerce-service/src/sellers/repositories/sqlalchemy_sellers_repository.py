@@ -1,5 +1,6 @@
+# SQLAlchemy
 from sqlalchemy import Table, Column, Integer, String
-
+# Entity
 from src.sellers.entities.seller import Seller
     
 # Implementación con SQL Alchemy para el repositorio de sellers.

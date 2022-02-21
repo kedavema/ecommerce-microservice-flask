@@ -1,12 +1,11 @@
-
+# Flask
 from flask import Blueprint, request
-
+# Utils
 from src.utils.utils import authentication_required, is_superuser
-
+# Validations
 from enviame.inputvalidation import validate_schema_flask, SUCCESS_CODE, FAIL_CODE
-
 from src.users.http.validation import user_validatable_fields
-
+# Password Hash Generator
 from werkzeug.security import generate_password_hash
 
 

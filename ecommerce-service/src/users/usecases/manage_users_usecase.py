@@ -1,11 +1,11 @@
+# Utils
 import jwt
-
 import datetime
-
+# Flask
 from flask import make_response, jsonify
-
+# Entity
 from src.users.entities.user import User
-
+# Check Password Hash
 from werkzeug.security import check_password_hash
 
 # Casos de uso para el manejo de usuarios.
@@ -35,7 +35,7 @@ class ManageUsersUsecase:
 
     def create_superuser(self, data):
 
-        # Crea una instancia User desde la data recibida, que ya debe venir validada desde afuera,
+        # Crea una instancia Superuser desde la data recibida, que ya debe venir validada desde afuera,
         # y guarda dicha instancia en el repositorio para finalmente retornarla.
             
         user = User.from_dict(data)
@@ -46,7 +46,7 @@ class ManageUsersUsecase:
       
     def create_seller_user(self, data):
 
-        # Crea una instancia User desde la data recibida, que ya debe venir validada desde afuera,
+        # Crea una instancia Selleruser desde la data recibida, que ya debe venir validada desde afuera,
         # y guarda dicha instancia en el repositorio para finalmente retornarla.
             
         user = User.from_dict(data)
@@ -57,7 +57,7 @@ class ManageUsersUsecase:
       
     def create_marketplace_user(self, data):
 
-        # Crea una instancia User desde la data recibida, que ya debe venir validada desde afuera,
+        # Crea una instancia MarketplaceUser desde la data recibida, que ya debe venir validada desde afuera,
         # y guarda dicha instancia en el repositorio para finalmente retornarla.
             
         user = User.from_dict(data)
@@ -68,8 +68,7 @@ class ManageUsersUsecase:
       
     def delete_user(self, user_id):
 
-        # Realiza un hard-delete del libro con la ID especificada, si es que existe.
-        # A nivel de repositorio realiza una actualización al campo "deleted_at".
+        # Realiza un hard-delete del usuario con la ID especificada, si es que existe.
 
         user = self.get_user(user_id)
 
@@ -82,7 +81,7 @@ class ManageUsersUsecase:
           
     def get_token(self, data):
       
-        # Retorna un token de autenticacion para el usuario al hacer login
+        # Retorna un token de autenticacion para el usuario al hacer login.
         
         if not data or not data["email"] or not data["password"]:
             make_response("Could not verify", 401, {"www.authentication": "Login required"})

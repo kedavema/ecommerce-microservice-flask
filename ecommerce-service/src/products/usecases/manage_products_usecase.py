@@ -61,3 +61,30 @@ class ManageProductsUsecase:
 
         else:
             raise ValueError(f"Product of ID {product_id} doesn't exist or is already deleted.")
+          
+          
+    def decrease_qty(self, product_id, product_qty):
+      
+        # Disminuye los productos de la db de acuerdo a la cantidad de productos de la orden de compra.
+        
+        product = self.get_product(product_id)
+        
+        if product:
+            product = self.products_repository.decrease_qty(product_id, product_qty)
+          
+        else:
+            raise ValueError(f"Product of ID {product_id} doesn't exist or is already deleted.")
+          
+          
+    def increase_qty(self, product_id, product_qty):
+      
+        # Aumenta los productos en la db de acuerdo a la cantidad de productos de la orden de compra cancelada.
+        
+        product = self.get_product(product_id)
+        
+        if product:
+            product = self.products_repository.increase_qty(product_id, product_qty)
+          
+        else:
+            raise ValueError(f"Product of ID {product_id} doesn't exist or is already deleted.")
+          

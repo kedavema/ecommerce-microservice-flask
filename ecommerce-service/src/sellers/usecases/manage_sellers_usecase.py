@@ -61,3 +61,4 @@ class ManageSellersUsecase:
 
         else:
             raise ValueError(f"seller of ID {seller_id} doesn't exist or is already deleted.")
+          

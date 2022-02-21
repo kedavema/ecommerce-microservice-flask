@@ -1,12 +1,10 @@
-
+# Flask
 from flask import Blueprint, request
-
+# Utils
 from src.utils.utils import is_superuser
-
 from src.utils.utils import authentication_required
-
+# Validations
 from enviame.inputvalidation import validate_schema_flask, SUCCESS_CODE, FAIL_CODE
-
 from src.sellers.http.validation import sellers_validatable_fields
 
 # Endpoints para CRUD de EMPRESAS.
@@ -18,7 +16,7 @@ from src.sellers.http.validation import sellers_validatable_fields
 
 # Se realiza la validación de datos de entrada mediante el decorador 
 # "@validate_schema_flask", el cual recibe como argumento un diccionario definido
-# en el archivo "book_validatable_fields". No sólo valida que todos los campos
+# en el archivo "seller_validatable_fields". No sólo valida que todos los campos
 # requeridos vengan en el payload, sino que también que no vengan campos de más.
 
 def create_sellers_blueprint(manage_sellers_usecase):
@@ -48,6 +46,7 @@ def create_sellers_blueprint(manage_sellers_usecase):
         }
         
         return response, http_code
+      
 
     @sellers.route("/sellers/<string:seller_id>", methods = ["GET"])
     @authentication_required
@@ -77,6 +76,7 @@ def create_sellers_blueprint(manage_sellers_usecase):
             response["data"] = data
         
         return response, http_code
+      
 
     @sellers.route("/sellers", methods = ["POST"])
     @validate_schema_flask(sellers_validatable_fields.SELLER_CREATION_VALIDATABLE_FIELDS)
@@ -108,6 +108,7 @@ def create_sellers_blueprint(manage_sellers_usecase):
             response["data"] = data
 
         return response, http_code
+      
 
     @sellers.route("/sellers/<string:seller_id>", methods = ["PUT"])
     @validate_schema_flask(sellers_validatable_fields.SELLER_UPDATE_VALIDATABLE_FIELDS)
@@ -139,6 +140,7 @@ def create_sellers_blueprint(manage_sellers_usecase):
             response["data"] = data
 
         return response, http_code
+      
 
     @sellers.route("/sellers/<string:seller_id>", methods = ["DELETE"])
     @authentication_required
@@ -162,5 +164,6 @@ def create_sellers_blueprint(manage_sellers_usecase):
         }
 
         return response, http_code
+      
 
     return sellers

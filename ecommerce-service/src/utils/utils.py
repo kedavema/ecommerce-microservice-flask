@@ -1,13 +1,12 @@
-from datetime import datetime, timezone
-from functools import wraps
-import json
-from flask import request, jsonify
 import jwt
 from src import main
+from functools import wraps
+from flask import request, jsonify
+from datetime import datetime, timezone
 
 # Funciones de utilidad para el sistema completo.
 
-# Si bien no va dentro de ninguna de las carpetas de contexto ("books" o "greeting"),
+# Si bien no va dentro de ninguna de las carpetas de contexto,
 # estas funciones corresponden a la capa más interna de Clean Architecture, que corresponde
 # a la capa Entities. Esta capa no solamente puede contener entidades, sino cualquier código
 # que es usado a nivel de aplicación completo.
@@ -70,7 +69,7 @@ def authentication_required(f):
   
 def is_seller(f):
   
-    # Decorador encargado de verificar si es un superusuario.
+    # Decorador encargado de verificar si es un vendedor.
     
     @wraps(f)
     def decorator(*args, **kwargs):
@@ -110,3 +109,4 @@ def is_superuser(f):
         return f(*args, **kwargs)
       
     return decorator
+  

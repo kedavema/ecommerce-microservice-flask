@@ -1,5 +1,6 @@
+# SQLAlchemy
 from sqlalchemy import Table, Column, Integer, String
-
+# Entity
 from src.products.entities.product import Product
     
 # Implementación con SQL Alchemy para el repositorio de Productos.
@@ -31,6 +32,7 @@ class SQLAlchemyProductsRepository():
         )
 
         sqlalchemy_client.mapper_registry.map_imperatively(Product, self.products_table)
+        
 
     def get_products(self):
         
@@ -38,6 +40,7 @@ class SQLAlchemyProductsRepository():
             
             products = session.query(Product).all()
             return products
+          
 
     def get_product(self, id):
         
@@ -45,6 +48,7 @@ class SQLAlchemyProductsRepository():
 
             product = session.query(Product).filter_by(id = id).first()
             return product
+          
 
     def create_product(self, product):
 
@@ -54,6 +58,7 @@ class SQLAlchemyProductsRepository():
             session.commit()
 
             return product
+          
 
     def update_product(self, id, fields):
 
@@ -67,6 +72,7 @@ class SQLAlchemyProductsRepository():
             
             product = session.query(Product).filter_by(id = id).first()
             return product
+          
 
     def hard_delete_product(self, id):
 
@@ -76,16 +82,21 @@ class SQLAlchemyProductsRepository():
             session.delete(product)
             session.commit()
 
-    def hard_delete_all_products(self):
 
-        if self.test:
-
-            with self.session_factory() as session:
-                
-                session.query(Product).delete()
-                session.commit()
-
-    def drop_product_table(self):
-
-        if self.test:
-            self.client.drop_table(self.products_table)
+    def decrease_qty(self, id, product_qty):
+      
+        with self.session_factory() as session:
+          
+            product = session.query(Product).get(id)
+            product.qty -= product_qty
+            session.commit()
+            
+            
+    def increase_qty(self, id, product_qty):
+      
+        with self.session_factory() as session:
+          
+            product = session.query(Product).get(id)
+            product.qty += product_qty
+            session.commit()
+            

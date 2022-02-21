@@ -1,5 +1,6 @@
+# SQLAlchemy
 from sqlalchemy import Table, Column, Integer, String, Boolean, ForeignKey
-
+# Entity
 from src.users.entities.user import User
     
 # Implementación con SQL Alchemy para el repositorio de usuarios.

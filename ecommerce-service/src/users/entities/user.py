@@ -33,8 +33,6 @@ class User():
         # Retorna un diccionario serializable a JSON.
         # Es parecido a "to_dict", pero es útil para mostrar datos en el exterior,
         # como por ejemplo retornar una respuesta hacia al usuario desde el endpoint.
-        # En este caso no se retorna la fecha "deleted_at", ya que es información
-        # privada, y las fechas se transforman a un formato legible.
 
         data = self.to_dict()
         
@@ -56,3 +54,4 @@ class User():
         is_seller = dict.get("is_seller")
 
         return User(id, name, password, email, shipping_address, is_superuser, is_seller)
+      
