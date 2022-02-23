@@ -6,7 +6,7 @@
 # en este último los campos son opcionales, y en algunos casos algunos campos
 # podrían sólo definirse en la creación pero no permitir su actualización.
 
-SELLER_CREATION_VALIDATABLE_FIELDS = {
+PRODUCT_CREATION_VALIDATABLE_FIELDS = {
 
     "name": {
         "required": True,
@@ -18,18 +18,14 @@ SELLER_CREATION_VALIDATABLE_FIELDS = {
         "type": "string",
     },
 
-    "warehouse": {
-        "required": True,
-        "type": "string",
-    },
-    "vendedor": {
+    "qty": {
         "required": True,
         "type": "integer",
     },
 
 }
 
-SELLER_UPDATE_VALIDATABLE_FIELDS = {
+PRODUCT_UPDATE_VALIDATABLE_FIELDS = {
 
     "name": {
         "required": False,
@@ -41,9 +37,9 @@ SELLER_UPDATE_VALIDATABLE_FIELDS = {
         "type": "string",
     },
 
-    "warehouse": {
+    "qty": {
         "required": False,
-        "type": "string",
+        "type": "integer",
     },
 
 }

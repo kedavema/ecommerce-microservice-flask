@@ -4,7 +4,7 @@ services:
   #ecommerce-service block
   ecommerce-app:
 
-    platform: linux/x86_64
+    # platform: linux/x86_64
   
     build: ${ECOMMERCE_SERVICE_PATH}/Docker/app/.
   

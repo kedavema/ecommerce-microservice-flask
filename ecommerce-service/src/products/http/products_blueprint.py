@@ -78,8 +78,8 @@ def create_products_blueprint(manage_products_usecase):
 
     @products.route("/products", methods = ["POST"])
     @validate_schema_flask(product_validatable_fields.PRODUCT_CREATION_VALIDATABLE_FIELDS)
-    @authentication_required
-    @is_seller
+    # @authentication_required
+    # @is_seller
     def create_product():
 
         body = request.get_json()
@@ -110,8 +110,8 @@ def create_products_blueprint(manage_products_usecase):
 
     @products.route("/products/<string:product_id>", methods = ["PUT"])
     @validate_schema_flask(product_validatable_fields.PRODUCT_UPDATE_VALIDATABLE_FIELDS)
-    @authentication_required
-    @is_seller
+    # @authentication_required
+    # @is_seller
     def update_product(product_id):
 
         body = request.get_json()

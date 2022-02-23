@@ -1,16 +1,22 @@
-from src.frameworks.db.firestore import create_firestore_client
+# from src.frameworks.db.firestore import create_firestore_client
 from src.frameworks.db.redis import create_redis_client
 from src.frameworks.db.sqlalchemy import SQLAlchemyClient
 from src.frameworks.http.flask import create_flask_app
 
-from src.books.http.books_blueprint import create_books_blueprint
-from src.books.repositories.firestore_books_repository import FirestoreBooksRepository
-from src.books.repositories.sqlalchemy_books_repository import SQLAlchemyBooksRepository
-from src.books.usecases.manage_books_usecase import ManageBooksUsecase
+# from src.books.http.books_blueprint import create_books_blueprint
+# from src.books.repositories.firestore_books_repository import FirestoreBooksRepository
+# from src.books.repositories.sqlalchemy_books_repository import SQLAlchemyBooksRepository
+# from src.books.usecases.manage_books_usecase import ManageBooksUsecase
 
 from src.greeting.http.greeting_blueprint import create_greeting_blueprint
 from src.greeting.repositories.redis_greeting_cache import RedisGreetingCache
 from src.greeting.usecases.greeting_usecase import GreetingUsecase
+
+
+########################### DELIVERY ###########################
+from src.deliveries.repositories.sqlalchemy_deliveries_repository import SQLAlchemyDeliveriesRepository
+from src.deliveries.usecases.manage_deliveries_usecase import ManageDeliveriesUsecase
+from src.deliveries.http.deliveries_blueprint import create_deliveries_blueprint
 
 # Instanciar dependencias.
 
@@ -21,19 +27,19 @@ from src.greeting.usecases.greeting_usecase import GreetingUsecase
 redis_client = create_redis_client()
 redis_greeting_cache = RedisGreetingCache(redis_client)
 
-firestore_client = create_firestore_client()
-firestore_books_repository = FirestoreBooksRepository(firestore_client)
+# firestore_client = create_firestore_client()
+# firestore_books_repository = FirestoreBooksRepository(firestore_client)
 
 sqlalchemy_client = SQLAlchemyClient()
-sqlalchemy_books_repository = SQLAlchemyBooksRepository(sqlalchemy_client)
+sqlalchemy_deliveries_repository = SQLAlchemyDeliveriesRepository(sqlalchemy_client)
 sqlalchemy_client.create_tables()
 
 greeting_usecase = GreetingUsecase(redis_greeting_cache)
-manage_books_usecase = ManageBooksUsecase(firestore_books_repository)
+manage_deliveries_usecase = ManageDeliveriesUsecase(sqlalchemy_deliveries_repository)
 # manage_books_usecase = ManageBooksUsecase(sqlalchemy_books_repository)
 
 blueprints = [
-    create_books_blueprint(manage_books_usecase),
+    create_deliveries_blueprint(manage_deliveries_usecase),
     create_greeting_blueprint(greeting_usecase),
 ]
 

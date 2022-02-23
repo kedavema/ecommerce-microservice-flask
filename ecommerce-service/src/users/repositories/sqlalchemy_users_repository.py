@@ -33,6 +33,7 @@ class SQLAlchemyUsersRepository():
             Column("warehouse_address", String(50)),
             Column("is_superuser", Boolean()),
             Column("is_seller", Boolean()),
+            Column("seller_id", ForeignKey("sellers.id"))
         )
 
         sqlalchemy_client.mapper_registry.map_imperatively(User, self.users_table)
@@ -52,6 +53,17 @@ class SQLAlchemyUsersRepository():
 
             user = session.query(User).filter_by(id = id).first()
             return user      
+          
+          
+    def update_user_seller_id(self, user_id, seller_id):
+
+        with self.session_factory() as session:
+
+            user = session.query(User).filter_by(id = user_id).first()
+            user.seller_id = seller_id
+            session.commit()
+            
+            return user
           
           
     def create_superuser(self, superuser):

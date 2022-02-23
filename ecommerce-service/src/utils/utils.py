@@ -110,3 +110,27 @@ def is_superuser(f):
       
     return decorator
   
+  
+def is_marketplace_user(f):
+  
+    # Decorador encargado de verificar si es un usuario normal.
+    
+    @wraps(f)
+    def decorator(*args, **kwargs):
+      
+        user_id = kwargs.pop("id")
+        
+        user = main.manage_users_usecase.get_user(user_id)
+        
+        if user is None:
+          
+            return jsonify({"message": "You must create a superuser first"})
+        
+        elif user.is_superuser or user.is_seller:
+          
+            return jsonify({"message": "User is not authorized"})
+          
+        return f(user_id, *args, **kwargs)
+      
+    return decorator
+  

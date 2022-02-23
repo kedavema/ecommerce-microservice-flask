@@ -1,5 +1,5 @@
 # SQLAlchemy
-from sqlalchemy import Table, Column, Integer, String
+from sqlalchemy import Table, Column, Integer, String, ForeignKey
 # Entity
 from src.sellers.entities.seller import Seller
     
@@ -29,6 +29,7 @@ class SQLAlchemySellersRepository():
             Column("name", String(50)),
             Column("short_desc", String(100)),
             Column("warehouse", String(200)),
+            Column("vendedor", ForeignKey("Users.id"))
         )
 
         sqlalchemy_client.mapper_registry.map_imperatively(Seller, self.sellers_table)

@@ -1,5 +1,5 @@
 # SQLAlchemy
-from sqlalchemy import Table, Column, Integer, String
+from sqlalchemy import Table, Column, Integer, String, ForeignKey
 # Entity
 from src.products.entities.product import Product
     

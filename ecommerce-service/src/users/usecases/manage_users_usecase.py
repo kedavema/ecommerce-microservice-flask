@@ -31,6 +31,24 @@ class ManageUsersUsecase:
         # Retorna una instancia de User según la ID recibida.
 
         return self.users_repository.get_user(user_id)
+      
+      
+    def update_user_seller_id(self, user_id, seller_id):
+
+        # Actualiza los datos recibidos y los guarda en el repositorio según la ID recibida.
+        # La data no necesariamente debe contener todos los campos de la entidad, sólo
+        # los campos que se van a actualizar. Esta data debe venir validada desde afuera.
+
+        user_seller = self.get_user(user_id)
+
+        if user_seller:
+
+            user_seller = self.users_repository.update_user_seller_id(user_id, seller_id)
+
+            return user_seller
+
+        else:
+            raise ValueError(f"User seller of ID {user_id} doesn't exist.")
 
 
     def create_superuser(self, data):

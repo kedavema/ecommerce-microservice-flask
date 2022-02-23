@@ -85,8 +85,8 @@ def create_users_blueprint(manage_users_usecase):
     
     @users.route("/create-seller", methods = ["POST"])
     @validate_schema_flask(user_validatable_fields.SELLER_USER_CREATION_VALIDATABLE_FIELDS)
-    @authentication_required
-    @is_superuser
+    # @authentication_required
+    # @is_superuser
     def create_seller_user():
 
         body = request.get_json()
@@ -123,8 +123,8 @@ def create_users_blueprint(manage_users_usecase):
     
     @users.route("/create-user", methods = ["POST"])
     @validate_schema_flask(user_validatable_fields.MARKETPLACE_USER_CREATION_VALIDATABLE_FIELDS)
-    @authentication_required
-    @is_superuser
+    # @authentication_required
+    # @is_superuser
     def create_marketplace_user():
       
         body = request.get_json()

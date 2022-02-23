@@ -3,12 +3,13 @@
 
 class Seller():
 
-    def __init__(self, id, name, short_desc, warehouse):
+    def __init__(self, id, name, short_desc, warehouse, vendedor):
 
         self.id = id
         self.name = name
         self.short_desc = short_desc
         self.warehouse = warehouse
+        self.vendedor = vendedor
 
     def to_dict(self):
 
@@ -20,6 +21,7 @@ class Seller():
             "name": self.name,
             "short_desc": self.short_desc,
             "warehouse": self.warehouse,
+            "vendedor": self.vendedor,
         }
 
     def serialize(self):
@@ -43,6 +45,7 @@ class Seller():
         name = dict.get("name")
         short_desc = dict.get("short_desc")
         warehouse = dict.get("warehouse")
+        vendedor = dict.get("vendedor")
 
-        return Seller(id, name, short_desc, warehouse)
+        return Seller(id, name, short_desc, warehouse, vendedor)
       

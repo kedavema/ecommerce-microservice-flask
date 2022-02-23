@@ -30,6 +30,8 @@ class SQLAlchemyOrdersRepository():
             Column("product_sku", Integer),
             Column("product_qty", Integer),
             Column("product_name", String(200)),
+            Column("customer_id", Integer),
+            Column("customer_address", String(200)),
         )
 
         sqlalchemy_client.mapper_registry.map_imperatively(Order, self.orders_table)

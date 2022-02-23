@@ -3,13 +3,15 @@
 
 class Order():
 
-    def __init__(self, id, status, product_sku, product_qty, product_name):
+    def __init__(self, id, status, product_sku, product_qty, product_name,customer_id, customer_address):
 
         self.id = id
         self.status = status
         self.product_sku = product_sku
         self.product_qty = product_qty
         self.product_name = product_name
+        self.customer_id = customer_id
+        self.customer_address = customer_address
 
     def to_dict(self):
 
@@ -22,6 +24,8 @@ class Order():
             "product_sku": self.product_sku,
             "product_qty": self.product_qty,
             "product_name": self.product_name,
+            "customer_id": self.customer_id,
+            "customer_address": self.customer_address,
         }
 
     def serialize(self):
@@ -46,5 +50,7 @@ class Order():
         product_sku = dict.get("product_sku")
         product_qty = dict.get("product_qty")
         product_name = dict.get("product_name")
+        customer_id = dict.get("customer_id")
+        customer_address = dict.get("customer_address")
 
-        return Order(id, status, product_sku, product_qty, product_name)
+        return Order(id, status, product_sku, product_qty, product_name, customer_id, customer_address)
