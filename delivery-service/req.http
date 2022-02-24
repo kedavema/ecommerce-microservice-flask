@@ -1,31 +1,53 @@
-### Saludo.
-GET http://localhost:8001/greeting
+###################################
+### MICROSERVICIO DE DELIVERIES ###
+###################################
 
-### Obtener todos los libros.
-GET http://localhost:8001/books
+### CRUD DE DELIVERY
 
-### Obtener libro por ID.
-GET http://localhost:8001/books/gIIQnRJzmonQ4WgUqEZq
+### Obtener las entregas
+GET http://localhost:8001/deliveries
 
-### Crear libro.
-POST http://localhost:8001/books
+
+### Obtener las entregas por ID
+GET http://localhost:8001/deliveries/1
+
+
+### Crear un delivery
+
+# Este es el endpoint utilizado por el microservicio de E-commerce para la creación 
+# automática de un delivery, al cambiar el estado de una orden a "dispatched".
+
+POST http://localhost:8001/deliveries
 Content-Type: application/json
 
 {
-    "title": "Mi nuevo libro",
-    "author": "Hans A.C.",
-    "pages": 100
+    "order":
+    {
+        "foreing_order_id": "order number provided by ecommerce microservice",
+        "products": [{
+                "sku": "unique id of product",
+                "name": "product name",
+                "qty": "product quantity"
+            }]
+    },
+    "origin": {
+        "address": "pickup address"
+    },
+    "destination": {
+        "name": "customer name",
+        "address": "customer address"
+    }
 }
 
-### Actualizar libro.
-PUT http://localhost:8001/books/gIIQnRJzmonQ4WgUqEZq
+### Obtener el seguimiento de una entrega
+
+GET http://localhost:8001/deliveries/tracking
 Content-Type: application/json
 
 {
-    "title": "Mi nuevo libro (edición 2)",
-    "author": "Hans A.C.",
-    "pages": 110
+    "tracking_number": 1
 }
 
-### Borrar libro.
-DELETE http://localhost:8001/books/gIIQnRJzmonQ4WgUqEZq
+### Eliminar una entrega
+
+DELETE http://localhost:8001/deliveries/2

@@ -2,7 +2,7 @@
 from sqlalchemy import Table, Column, Integer, String, ForeignKey
 # Entity
 from src.products.entities.product import Product
-    
+
 # Implementación con SQL Alchemy para el repositorio de Productos.
 
 class SQLAlchemyProductsRepository():
@@ -88,8 +88,13 @@ class SQLAlchemyProductsRepository():
         with self.session_factory() as session:
           
             product = session.query(Product).get(id)
-            product.qty -= product_qty
-            session.commit()
+            
+            if product.qty > product_qty:
+                product.qty -= product_qty
+                session.commit()
+            
+            elif product.qty < product_qty:
+                raise ValueError("The product quantity exceeded the stock!")
             
             
     def increase_qty(self, id, product_qty):

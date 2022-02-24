@@ -1,31 +1,192 @@
-### Saludo.
-GET http://localhost:8000/greeting
+### Obtener usuarios(admin, seller, marketplace)
+GET http://localhost:8000/users
 
-### Obtener todos los libros.
-GET http://localhost:8000/books
+#################################################################################
+### CREACION DE LOS  USUARIOS (ADMINISTRADOR, VENDEDOR, USUARIO DEL MERCADO) ###
+#################################################################################
 
-### Obtener libro por ID.
-GET http://localhost:8000/books/gIIQnRJzmonQ4WgUqEZq
-
-### Crear libro.
-POST http://localhost:8000/books
+### Crear usuario Administrador
+POST  http://localhost:8000/create-superuser
 Content-Type: application/json
 
 {
-    "title": "Mi nuevo libro",
-    "author": "Hans A.C.",
-    "pages": 100
+    "name": "Administrador",
+    "password": "password",
+	  "email": "admin@admin.com"
 }
 
-### Actualizar libro.
-PUT http://localhost:8000/books/gIIQnRJzmonQ4WgUqEZq
+### Crear usuario vendedor
+POST http://localhost:8000/create-seller
 Content-Type: application/json
 
 {
-    "title": "Mi nuevo libro (edición 2)",
-    "author": "Hans A.C.",
-    "pages": 110
+    "name": "Vendedor de PedidosYa",
+    "password": "password123",
+  	"email": "pedidos@ya.com"
 }
 
-### Borrar libro.
-DELETE http://localhost:8000/books/gIIQnRJzmonQ4WgUqEZq
+### Crear usuario del mercado
+POST http://localhost:8000/create-user
+Content-Type: application/json
+
+{
+    "name": "Juan Perez",
+    "password": "password0000",
+  	"email": "juanperez89@hotmail.com",
+    "shipping_address": "La direccion de mi casa"
+}
+
+
+#############################################################################################
+### LOGIN CORRESPONDIENTE A CADA USUARIO PARA LA OBTENCION DE LOS TOKENS CORRESPONDIENTES ###
+#############################################################################################
+
+
+### Login con administrador
+POST http://localhost:8000/login
+Content-Type: application/json
+
+{
+    "email": "admin@admin.com",
+    "password": "password"
+}
+
+### Login con user_seller
+POST http://localhost:8000/login
+Content-Type: application/json
+
+{
+    "email": "pedidos@ya.com",
+    "password": "password123"
+}
+
+### Login con marketplace user
+POST http://localhost:8000/login
+Content-Type: application/json
+
+{
+    "email": "juanperez89@hotmail.com",
+    "password": "password0000"
+}
+
+#####################################################################
+### FAVOR COLOCAR CADA TOKEN EN SUS RESPECTIVOS CAMPOS REQUERIDOS ###
+############## ADMIN_TOKEN, SELLER_TOKEN, USER_TOKEN ################
+#####################################################################
+
+### CRUD DE LAS EMPRESAS(SELLERS)
+
+### Obtener las empresas
+GET http://localhost:8000/sellers
+auth-token: ADMIN_TOKEN
+
+### Obtener empresa por ID
+GET http://localhost:8000/sellers/id
+auth-token: ADMIN_TOKEN
+
+### Crear Empresa
+POST http://localhost:8000/sellers
+Content-Type: application/json
+auth-token: ADMIN_TOKEN
+
+{
+    "name": "PedidosYa",
+    "short_desc": "Empresa de courier",
+    "warehouse": "Direccion de retiro de productos"
+}
+
+### Editar Empresa
+PUT http://localhost:8000/sellers/1
+Content-Type: application/json
+auth-token: ADMIN_TOKEN
+
+{
+    "name": "Pedidos Ya",
+    "short_desc": "Empresa de delivery",
+    "warehouse": "Direccion de retiro de productos de la empresa"
+}
+
+### Eliminar Empresa
+DELETE http://localhost:8000/sellers/2
+auth-token: ADMIN_TOKEN
+
+
+### CRUD PRODUCTOS
+
+### Obtener Productos
+GET http://localhost:8000/products
+auth-token: SELLER_TOKEN
+
+### Obtener Producto por ID
+GET http://localhost:8000/products/1
+auth-token: SELLER_TOKEN
+
+### Crear Producto
+POST http://localhost:8000/products
+Content-Type: application/json
+auth-token: SELLER_TOKEN
+
+{
+    "name": "Iphone 13",
+    "short_desc": "El smartphone mas avanzado del mundo",
+    "qty": 100
+}
+
+### Editar Producto
+PUT http://localhost:8000/products/1
+Content-Type: application/json
+auth-token: SELLER_TOKEN
+
+{
+    "name": "Iphone 12",
+    "short_desc": "El smartphone mas avanzado",
+    "qty": 120
+}
+
+### Eliminar Producto 
+DELETE http://localhost:8000/products/2
+auth-token: SELLER_TOKEN
+
+
+### Comprar un producto/Crear orden de compra
+
+### Obtener Ordenes de Compra
+GET http://localhost:8000/orders
+auth-token: SELLER_TOKEN
+
+### Obtener orden de compra por ID
+GET http://localhost:8000/orders/1
+auth-token: SELLER_TOKEN
+
+### Crear Orden de Compra
+POST http://localhost:8000/orders
+Content-Type: application/json
+auth-token: USER_TOKEN
+
+{
+    "product_sku": 1,
+    "product_qty": 5
+}
+
+### Cambiar estado de orden de compra
+
+## Al cambiar el estado de "created" a "confirmed":
+# Disminuye automáticamente la cantidad del producto de la base de datos, de acuerdo
+# a la cantidad que se colocó en "product_qty", pueden verificar yendo al endpoint de obtener producto por ID
+
+## Al cambiar de "confirmed" a "dispatched":
+# Se le notifica al microservicio de Delivery y se crea el objeto Delivery con los datos de la orden, que
+# luego podremos verificar con el endpoint de deliveries(get)
+
+PATCH http://localhost:8000/orders/1
+Content-Type: application/json
+auth-token: SELLER_TOKEN
+
+{
+    "status": "dispatched",
+}
+
+### Borrar o cancelar orden de compra
+## Para borrar una orden de compra, el estado de la misma debe estar en "created" o "confirmed"
+
+DELETE http://localhost:8000/orders/2

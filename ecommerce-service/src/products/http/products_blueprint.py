@@ -7,7 +7,7 @@ from src.utils.utils import authentication_required
 from enviame.inputvalidation import validate_schema_flask, SUCCESS_CODE, FAIL_CODE
 from src.products.http.validation import product_validatable_fields
 
-# Endpoints para CRUD de libros.
+# Endpoints para CRUD de Productos.
 
 # Sólo se encarga de recibir las llamadas HTTP y le entrega los datos
 # relevantes a los casos de uso correspondientes. Esta capa no debe
@@ -21,11 +21,11 @@ from src.products.http.validation import product_validatable_fields
 
 def create_products_blueprint(manage_products_usecase):
   
-    from src.main import manage_orders_usecase
-
     products = Blueprint("products", __name__)
 
     @products.route("/products", methods = ["GET"])
+    @authentication_required
+    @is_seller
     def get_products():
 
         products = manage_products_usecase.get_products()
@@ -49,6 +49,8 @@ def create_products_blueprint(manage_products_usecase):
       
 
     @products.route("/products/<string:product_id>", methods = ["GET"])
+    @authentication_required
+    @is_seller
     def get_product(product_id):
 
         product = manage_products_usecase.get_product(product_id)
@@ -78,8 +80,8 @@ def create_products_blueprint(manage_products_usecase):
 
     @products.route("/products", methods = ["POST"])
     @validate_schema_flask(product_validatable_fields.PRODUCT_CREATION_VALIDATABLE_FIELDS)
-    # @authentication_required
-    # @is_seller
+    @authentication_required
+    @is_seller
     def create_product():
 
         body = request.get_json()
@@ -110,8 +112,8 @@ def create_products_blueprint(manage_products_usecase):
 
     @products.route("/products/<string:product_id>", methods = ["PUT"])
     @validate_schema_flask(product_validatable_fields.PRODUCT_UPDATE_VALIDATABLE_FIELDS)
-    # @authentication_required
-    # @is_seller
+    @authentication_required
+    @is_seller
     def update_product(product_id):
 
         body = request.get_json()

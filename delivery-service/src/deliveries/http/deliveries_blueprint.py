@@ -1,8 +1,5 @@
 # Flask
 from flask import Blueprint, request
-# Utils
-# from src.utils.utils import is_seller
-# from src.utils.utils import authentication_required
 # Validations
 from enviame.inputvalidation import validate_schema_flask, SUCCESS_CODE, FAIL_CODE
 from src.deliveries.http.validation import delivery_validatable_fields
@@ -107,8 +104,6 @@ def create_deliveries_blueprint(manage_deliveries_usecase):
       
 
     @deliveries.route("/deliveries", methods = ["POST"])
-    # @authentication_required
-    # @is_seller
     def create_delivery():
 
         body = request.get_json()
@@ -138,9 +133,6 @@ def create_deliveries_blueprint(manage_deliveries_usecase):
       
 
     @deliveries.route("/deliveries/<string:delivery_id>", methods = ["PUT"])
-    # @validate_schema_flask(delivery_validatable_fields.delivery_UPDATE_VALIDATABLE_FIELDS)
-    # @authentication_required
-    # @is_seller
     def update_delivery(delivery_id):
 
         body = request.get_json()
@@ -170,8 +162,6 @@ def create_deliveries_blueprint(manage_deliveries_usecase):
       
 
     @deliveries.route("/deliveries/<string:delivery_id>", methods = ["DELETE"])
-    # @authentication_required
-    # @is_seller
     def delete_delivery(delivery_id):
 
         try:

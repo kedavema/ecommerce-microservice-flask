@@ -22,10 +22,6 @@ SELLER_CREATION_VALIDATABLE_FIELDS = {
         "required": True,
         "type": "string",
     },
-    "vendedor": {
-        "required": True,
-        "type": "integer",
-    },
 
 }
 

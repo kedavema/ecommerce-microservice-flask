@@ -21,13 +21,11 @@ from src.sellers.http.validation import sellers_validatable_fields
 
 def create_sellers_blueprint(manage_sellers_usecase):
   
-    from src.main import manage_users_usecase
-
     sellers = Blueprint("sellers", __name__)
 
     @sellers.route("/sellers", methods = ["GET"])
-    # @authentication_required
-    # @is_superuser
+    @authentication_required
+    @is_superuser
     def all_sellers():
 
         sellers = manage_sellers_usecase.get_sellers()
@@ -51,8 +49,8 @@ def create_sellers_blueprint(manage_sellers_usecase):
       
 
     @sellers.route("/sellers/<string:seller_id>", methods = ["GET"])
-    # @authentication_required
-    # @is_superuser
+    @authentication_required
+    @is_superuser
     def get_seller(seller_id):
 
         seller = manage_sellers_usecase.get_seller(seller_id)
@@ -82,19 +80,17 @@ def create_sellers_blueprint(manage_sellers_usecase):
 
     @sellers.route("/sellers", methods = ["POST"])
     @validate_schema_flask(sellers_validatable_fields.SELLER_CREATION_VALIDATABLE_FIELDS)
-    # @authentication_required
-    # @is_superuser
+    @authentication_required
+    @is_superuser
     def create_seller():
 
         body = request.get_json()
-        user_seller_id = body["vendedor"] 
         
         try:
             seller = manage_sellers_usecase.create_seller(body)
             data = seller.serialize()
-            manage_users_usecase.update_user_seller_id(user_id=user_seller_id, seller_id=data["id"])
             code = SUCCESS_CODE
-            message = "seller created succesfully"
+            message = "Seller created succesfully"
             http_code = 201
 
         except ValueError as e:
@@ -116,8 +112,8 @@ def create_sellers_blueprint(manage_sellers_usecase):
 
     @sellers.route("/sellers/<string:seller_id>", methods = ["PUT"])
     @validate_schema_flask(sellers_validatable_fields.SELLER_UPDATE_VALIDATABLE_FIELDS)
-    # @authentication_required
-    # @is_superuser
+    @authentication_required
+    @is_superuser
     def update_seller(seller_id):
 
         body = request.get_json()
@@ -147,8 +143,8 @@ def create_sellers_blueprint(manage_sellers_usecase):
       
 
     @sellers.route("/sellers/<string:seller_id>", methods = ["DELETE"])
-    # @authentication_required
-    # @is_superuser
+    @authentication_required
+    @is_superuser
     def delete_seller(seller_id):
 
         try:

@@ -29,7 +29,7 @@ class SQLAlchemySellersRepository():
             Column("name", String(50)),
             Column("short_desc", String(100)),
             Column("warehouse", String(200)),
-            Column("vendedor", ForeignKey("Users.id"))
+            # Column("seller_user", ForeignKey("Users.id", ondelete="CASCADE"))
         )
 
         sqlalchemy_client.mapper_registry.map_imperatively(Seller, self.sellers_table)

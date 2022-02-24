@@ -78,7 +78,11 @@ def is_seller(f):
         
         user = main.manage_users_usecase.get_user(user_id)
         
-        if not user.is_seller:
+        if user is None:
+          
+            return jsonify({"message": "You must create a user first"})
+        
+        elif not user.is_seller:
           
             return jsonify({"message": "User is not authorized"})
           
@@ -100,7 +104,7 @@ def is_superuser(f):
         
         if user is None:
           
-            return jsonify({"message": "You must create a superuser first"})
+            return jsonify({"message": "You must create a user first"})
         
         elif not user.is_superuser:
           
@@ -124,7 +128,7 @@ def is_marketplace_user(f):
         
         if user is None:
           
-            return jsonify({"message": "You must create a superuser first"})
+            return jsonify({"message": "You must create a user first"})
         
         elif user.is_superuser or user.is_seller:
           

@@ -1,11 +1,9 @@
 # Flask
 from flask import Blueprint, request
-
-import requests
-
 # Utils
-from src.utils.utils import is_seller, is_marketplace_user
-from src.utils.utils import authentication_required
+from src.utils.utils import   is_seller, \
+                              is_marketplace_user, \
+                              authentication_required 
 # validation
 from enviame.inputvalidation import validate_schema_flask, SUCCESS_CODE, FAIL_CODE
 from src.orders.http.validation import order_validatable_fields
@@ -23,6 +21,7 @@ from src.orders.http.validation import order_validatable_fields
 # en el archivo "order_validatable_fields". No sólo valida que todos los campos
 # requeridos vengan en el payload, sino que también que no vengan campos de más.
 
+
 def create_orders_blueprint(manage_orders_usecase):
   
     from src.main import manage_products_usecase, manage_users_usecase
@@ -30,8 +29,8 @@ def create_orders_blueprint(manage_orders_usecase):
     orders = Blueprint("orders", __name__)
 
     @orders.route("/orders", methods = ["GET"])
-    # @authentication_required
-    # @is_seller
+    @authentication_required
+    @is_seller
     def get_orders():
 
         orders = manage_orders_usecase.get_orders()
@@ -52,10 +51,11 @@ def create_orders_blueprint(manage_orders_usecase):
         }
         
         return response, http_code
+      
 
     @orders.route("/orders/<string:order_id>", methods = ["GET"])
-    # @authentication_required
-    # @is_seller
+    @authentication_required
+    @is_seller
     def get_order(order_id):
 
         order = manage_orders_usecase.get_order(order_id)
@@ -81,6 +81,7 @@ def create_orders_blueprint(manage_orders_usecase):
             response["data"] = data
         
         return response, http_code
+      
 
     @orders.route("/orders", methods = ["POST"])
     @validate_schema_flask(order_validatable_fields.ORDER_CREATION_VALIDATABLE_FIELDS)
@@ -92,7 +93,9 @@ def create_orders_blueprint(manage_orders_usecase):
         product = manage_products_usecase.get_product(body["product_sku"])
         
         try:
-            order = manage_orders_usecase.create_order(body, product, user_id, manage_users_usecase)
+            order = manage_orders_usecase.create_order(
+                body, product, user_id, manage_users_usecase
+            )
             data = order.serialize()
             code = SUCCESS_CODE
             message = "order created succesfully"
@@ -125,7 +128,9 @@ def create_orders_blueprint(manage_orders_usecase):
         status = body["status"]
         
         try:
-            order = manage_orders_usecase.change_order_status(order_id, body, manage_products_usecase, manage_users_usecase)
+            order = manage_orders_usecase.change_order_status(
+                order_id, body, manage_products_usecase, manage_users_usecase
+            )
             data = order.serialize()
             message = f"Order status changed to {status}"
             code = SUCCESS_CODE

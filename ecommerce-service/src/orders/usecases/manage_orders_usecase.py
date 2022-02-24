@@ -31,8 +31,6 @@ class ManageOrdersUsecase:
         
         user = manage_users_usecase.get_user(user_id)
         
-        print(user.name, "Este es el usuario")
-        
         order["status"] = "created"
         order["product_name"] = product.name
         order["customer_id"] = user_id
@@ -56,11 +54,14 @@ class ManageOrdersUsecase:
           
             if fields["status"] == "confirmed":
               
+                if order.status == "confirmed":
+                    raise ValueError("The status is already confirmed!")
+              
                 # Si el estado es cambiado a Confirmado, el producto 
                 # que se obtiene de la orden de compra se reduce de la base de datos.
               
-                order = self.orders_repository.change_order_status(order_id, fields)
                 manage_products_usecase.decrease_qty(order.product_sku, order.product_qty)
+                order = self.orders_repository.change_order_status(order_id, fields)
                 
                 return order
               
@@ -87,11 +88,16 @@ class ManageOrdersUsecase:
                         "address": costumer.shipping_address
                     }
                 }
-              
+
+                # Aquí creamos el delivery con los datos a travez del endpoint de creación
+                # del microservicio de delivery-app
+                
                 url = "http://host.docker.internal:8001/deliveries"
                 headers = {"Content-Type": "application/json"}
                 session = requests.Session()
-                session.post(url, data=json.dumps(data), headers=headers)
+                response = session.post(url, data=json.dumps(data), headers=headers)
+                
+                print(response.content)
                 
                 order = self.orders_repository.change_order_status(order_id, fields)
                 
