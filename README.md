@@ -58,7 +58,3 @@ Para probar los endpoints basta con entrar al archivo req.http dentro de cada ca
 4. La orden de compra solo se puede cancelar(borrar) si el estado de la misma es "creado" o "confirmado".
 5. Al cancelar una orden de compra se incrementa automaticamente el producto que había sido disminuido en la base de datos.
 6. Si el estado de una orden se cambia a "enviado", el microservicio de ecommerce se comunica con el microservicio de delivery creando el objeto de entrega con los respectivos datos de la orden de compra.
-4. Para completar la aplicación me faltó implementar la relación entre una empresa y sus vendedores, así también la relación entre una empresa y los productos de la misma. Por el lado del microservicio de entregas me faltó implementar la función de cambio de estado de las entregas, tengo entendido que lo podría realizar como un task hecho con Celery para correr la función cada 30 segundos y así cambiar el estado, y por último realizar la notificación al microservicio de ecommerce de que el pedido ya fue entregado, pero por falta de tiempo ya no lo pude realizar.
-
-### Testing ⚙️
-En esta ocación por falta de tiempo no pude implementar los test unitarios para el proyecto.
